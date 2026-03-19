@@ -17,9 +17,6 @@
 | **DB_DATABASE** | 数据库名（需先手动建库） | 如 `ai_customer_service` |
 | **DB_USERNAME** | 数据库用户名 | 如 `root` |
 | **DB_PASSWORD** | 数据库密码 | 你的 MySQL 密码 |
-| **REDIS_HOST** | Redis 主机 | 本地填 `localhost` |
-| **REDIS_PORT** | Redis 端口 | 默认 `6379` |
-| **REDIS_PASSWORD** | Redis 密码（无密码可留空） | 可选 |
 | **COZE_PAT** | 扣子开放平台 PAT（个人访问令牌） | 扣子开放平台 → 开发者设置 → 个人访问令牌，权限含 chat、知识库等 |
 | **COZE_BOT_ID** | 扣子 Bot ID | 扣子 Bot 开发页 URL 或发布设置中获取 |
 | **WECOM_CORP_ID** | 企业微信企业 ID | 企业微信管理后台 → 我的企业 → 企业信息 |

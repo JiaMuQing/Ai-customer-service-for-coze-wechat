@@ -1,10 +1,10 @@
 # AI 客服管理系统
 
-基于 Node + Vue + MySQL + Redis，接入扣子（Coze）与企业微信智能机器人，实现群/单聊 AI 客服与简单管理后台。
+基于 Node + Vue + MySQL，接入扣子（Coze）与企业微信智能机器人，实现群/单聊 AI 客服与简单管理后台。
 
 ## 技术栈
 
-- **后端**：Nest.js、TypeORM、MySQL、Redis（配置在 .env，本期未用 Redis 业务逻辑，可后续加队列/缓存）
+- **后端**：Nest.js、TypeORM、MySQL
 - **前端**：Vue 3、Vite、Pinia、Element Plus
 - **登录**：固定用户名/密码（.env 配置），无权限系统
 

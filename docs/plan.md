@@ -6,7 +6,6 @@
 |------|------|------|
 | 后端 | Node.js + Nest.js | 调用扣子 API、企业微信回调、会话与任务队列 |
 | 前端 | Vue 3 + Vite + Pinia | 管理后台，可搭配 Ant Design Vue / Element Plus |
-| 缓存/队列 | Redis | 会话缓存、限流、回调幂等、任务队列（如 BullMQ） |
 | 数据库 | MySQL 8 | 群绑定、Bot 配置、会话记录等；后续可加 FULLTEXT 或 ES |
 | AI 能力 | 扣子（Coze）API | 知识库管理、Bot 对话（同一 bot_id，多会话靠 conversation_id 区分） |
 | 触达 | 企业微信 | 智能机器人（群内需 @ 才回调）、应用发消息到群 |
@@ -65,7 +64,7 @@
 |------|----------|
 | 扣子 | 注册扣子、创建并发布 Bot、配置知识库；生成 **PAT**（个人访问令牌），权限含 chat、知识库等；记录 **bot_id**。 |
 | 企业微信 | 创建**自建应用**，获取 corp_id、corp_secret、agent_id；在「智能机器人」能力中创建/绑定**智能机器人**，配置**接收消息**的回调 URL、Token、EncodingAESKey。 |
-| 环境 | 安装 Node 20+、MySQL 8、Redis；准备可被企业微信访问的 HTTPS 回调域名。 |
+| 环境 | 安装 Node 20+、MySQL 8；准备可被企业微信访问的 HTTPS 回调域名。 |
 | 本期不准备 | 权限体系、用户/角色/菜单管理、多租户。 |
 
 ---
