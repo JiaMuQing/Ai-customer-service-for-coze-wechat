@@ -6,9 +6,11 @@ export class AuthService {
   constructor(private readonly jwtService: JwtService) {}
 
   validateFixedUser(username: string, password: string): boolean {
-    const envUser = process.env.ADMIN_USERNAME ?? 'admin';
-    const envPass = process.env.ADMIN_PASSWORD ?? '';
-    return username === envUser && password === envPass;
+    const envUser = (process.env.ADMIN_USERNAME ?? 'admin').trim();
+    const envPass = (process.env.ADMIN_PASSWORD ?? '').trim();
+    const u = (username ?? '').trim();
+    const p = (password ?? '').trim();
+    return u === envUser && p === envPass;
   }
 
   login(username: string, password: string): { access_token: string } {

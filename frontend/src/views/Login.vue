@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, nextTick } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 
@@ -39,7 +39,8 @@ async function onSubmit() {
   loading.value = true;
   try {
     await auth.login(form.username, form.password);
-    router.push('/');
+    await nextTick();
+    await router.push('/');
   } catch (e: unknown) {
     error.value = (e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? '登录失败';
   } finally {

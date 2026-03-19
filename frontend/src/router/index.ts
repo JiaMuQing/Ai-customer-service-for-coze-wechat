@@ -24,7 +24,9 @@ router.beforeEach((to, _from, next) => {
     next();
     return;
   }
-  if (to.meta.requiresAuth && !auth.token) {
+  // Check both store and localStorage (store may not be updated yet in same tick)
+  const hasToken = auth.token || localStorage.getItem('token');
+  if (to.meta.requiresAuth && !hasToken) {
     next({ name: 'Login' });
     return;
   }

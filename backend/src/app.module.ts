@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { WecomModule } from './wecom/wecom.module';
@@ -12,7 +13,10 @@ import { ConversationMessage } from './session/entities/conversation-message.ent
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: '.env' }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: join(__dirname, '..', '.env'),
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST ?? 'localhost',
