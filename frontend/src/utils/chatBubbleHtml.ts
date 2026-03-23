@@ -1,83 +1,58 @@
 /**
- * Render assistant/user chat text as safe HTML: Markdown images and image-only links become <img>.
- * Other text is escaped; newlines become <br>.
+ * Render chat content as Markdown (GFM), then sanitize HTML for safe v-html.
+ * Images, headings, lists, links, code blocks from the bot display correctly.
  */
+import DOMPurify from 'dompurify';
+import { marked } from 'marked';
 
-const PLACEHOLDER = '\uE000';
-const PLACEHOLDER_END = '\uE001';
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
 
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function escapeAttr(s: string): string {
-  return escapeHtml(s).replace(/'/g, '&#39;');
-}
-
-function safeHttpsUrl(raw: string): string | null {
-  try {
-    const u = new URL(raw.trim());
-    if (u.protocol !== 'https:') return null;
-    return u.href;
-  } catch {
-    return null;
+/** Only allow http(s) resources in img/src and a/href */
+DOMPurify.addHook('uponSanitizeAttribute', (node, data) => {
+  if (data.attrName === 'src' && node.nodeName === 'IMG') {
+    const v = data.attrValue ?? '';
+    if (!/^https:\/\//i.test(v)) {
+      data.keepAttr = false;
+    }
   }
-}
+  if (data.attrName === 'href' && node.nodeName === 'A') {
+    const v = data.attrValue ?? '';
+    if (!/^https?:\/\//i.test(v)) {
+      data.keepAttr = false;
+    }
+  }
+});
 
-/** Link text is empty [](url) or URL looks like an image (Coze / RAG often uses querystrings). */
-function isLikelyImageUrl(url: string): boolean {
-  const u = url.toLowerCase();
-  if (/\.(png|jpe?g|gif|webp|bmp|svg)(\?|#|$)/i.test(u)) return true;
-  if (u.includes('oceancloudapi.com') || u.includes('ocean-cloud-tos')) return true;
-  if (u.includes('byte_rag') || u.includes('filebiztype')) return true;
-  return false;
-}
-
-const RE_IMG = /!\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g;
-const RE_LINK = /\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)/g;
-
-/**
- * Convert plain text with Markdown image/link fragments to safe HTML for bubble display.
- */
 export function formatChatBubbleHtml(raw: string): string {
-  if (!raw) return '';
+  if (!raw?.trim()) return '';
 
-  const chunks: string[] = [];
-  let s = raw;
+  const dirty = marked.parse(raw, { async: false });
+  let html = dirty.replace(/<img /gi, '<img class="chat-img" loading="lazy" referrerpolicy="no-referrer" ');
+  html = html.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" ');
 
-  s = s.replace(RE_IMG, (_full, alt: string, srcRaw: string) => {
-    const src = safeHttpsUrl(srcRaw);
-    if (!src) {
-      return escapeHtml(_full);
-    }
-    const idx = chunks.length;
-    chunks.push(
-      `<img class="chat-img" src="${escapeAttr(src)}" alt="${escapeHtml(alt)}" loading="lazy" referrerpolicy="no-referrer" />`,
-    );
-    return `${PLACEHOLDER}${idx}${PLACEHOLDER_END}`;
+  return DOMPurify.sanitize(html, {
+    ADD_ATTR: ['loading', 'referrerpolicy', 'class', 'target', 'rel', 'colspan', 'rowspan'],
+    ADD_TAGS: [
+      'img',
+      'h1',
+      'h2',
+      'h3',
+      'h4',
+      'h5',
+      'h6',
+      'pre',
+      'code',
+      'blockquote',
+      'hr',
+      'table',
+      'thead',
+      'tbody',
+      'tr',
+      'th',
+      'td',
+    ],
   });
-
-  s = s.replace(RE_LINK, (full, linkText: string, srcRaw: string) => {
-    const src = safeHttpsUrl(srcRaw);
-    if (!src || !isLikelyImageUrl(srcRaw)) {
-      return escapeHtml(full);
-    }
-    const idx = chunks.length;
-    chunks.push(
-      `<img class="chat-img" src="${escapeAttr(src)}" alt="${escapeHtml(linkText)}" loading="lazy" referrerpolicy="no-referrer" />`,
-    );
-    return `${PLACEHOLDER}${idx}${PLACEHOLDER_END}`;
-  });
-
-  s = escapeHtml(s);
-  s = s.replace(/\r\n/g, '\n').replace(/\n/g, '<br>');
-  s = s.replace(
-    new RegExp(`${PLACEHOLDER}(\\d+)${PLACEHOLDER_END}`, 'g'),
-    (_, i) => chunks[Number(i)] ?? '',
-  );
-  return s;
 }

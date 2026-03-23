@@ -233,6 +233,90 @@ onMounted(() => {
   background: #fff;
   border: 1px solid #e4e7ed;
 }
+.bubble-rich {
+  white-space: normal;
+}
+.bubble-rich :deep(p) {
+  margin: 6px 0;
+  line-height: 1.55;
+}
+.bubble-rich :deep(p:first-child) {
+  margin-top: 0;
+}
+.bubble-rich :deep(p:last-child) {
+  margin-bottom: 0;
+}
+.bubble-rich :deep(h1),
+.bubble-rich :deep(h2),
+.bubble-rich :deep(h3) {
+  font-weight: 600;
+  margin: 10px 0 6px;
+  line-height: 1.35;
+}
+.bubble-rich :deep(h1) {
+  font-size: 1.15rem;
+}
+.bubble-rich :deep(h2) {
+  font-size: 1.05rem;
+}
+.bubble-rich :deep(h3) {
+  font-size: 1rem;
+}
+.bubble-rich :deep(ul),
+.bubble-rich :deep(ol) {
+  padding-left: 1.25em;
+  margin: 6px 0;
+}
+.bubble-rich :deep(li) {
+  margin: 2px 0;
+}
+.bubble-rich :deep(pre) {
+  background: #f5f7fa;
+  padding: 8px 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 0.88em;
+  margin: 8px 0;
+}
+.bubble-rich :deep(code) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.9em;
+}
+.bubble-rich :deep(p code),
+.bubble-rich :deep(li code) {
+  background: #f0f2f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.bubble-rich :deep(blockquote) {
+  margin: 8px 0;
+  padding-left: 10px;
+  border-left: 3px solid #dcdfe6;
+  color: #606266;
+}
+.bubble-rich :deep(a) {
+  color: #409eff;
+  word-break: break-all;
+}
+.msg.user .bubble-rich :deep(a) {
+  color: #fff;
+  text-decoration: underline;
+}
+.bubble-rich :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+  font-size: 0.92em;
+}
+.bubble-rich :deep(th),
+.bubble-rich :deep(td) {
+  border: 1px solid #e4e7ed;
+  padding: 6px 8px;
+  text-align: left;
+}
+.bubble-rich :deep(th) {
+  background: #f5f7fa;
+}
 .bubble-rich :deep(.chat-img) {
   display: block;
   max-width: 100%;
