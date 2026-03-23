@@ -3,36 +3,39 @@
     <header class="top-bar">
       <h1 class="title">在线咨询</h1>
     </header>
-    <main class="chat-page">
+
+    <div class="chat-main">
       <p class="tip">与智能助手对话；历史记录按本浏览器访客保存在服务端，打开页面会加载近期记录。</p>
-    <div ref="scrollRef" class="messages">
-      <div
-        v-for="(m, i) in messages"
-        :key="i"
-        class="msg"
-        :class="m.role === 'user' ? 'user' : 'assistant'"
-      >
-        <span class="role">{{ m.role === 'user' ? '我' : '助手' }}</span>
-        <div class="bubble bubble-rich" v-html="formatChatBubbleHtml(m.content)"></div>
+      <div ref="scrollRef" class="messages">
+        <div
+          v-for="(m, i) in messages"
+          :key="i"
+          class="msg"
+          :class="m.role === 'user' ? 'user' : 'assistant'"
+        >
+          <span class="role">{{ m.role === 'user' ? '我' : '助手' }}</span>
+          <div class="bubble bubble-rich" v-html="formatChatBubbleHtml(m.content)"></div>
+        </div>
+        <div v-if="loading" class="msg assistant">
+          <span class="role">助手</span>
+          <div class="bubble muted">思考中…</div>
+        </div>
+        <div ref="bottomAnchor" class="scroll-anchor" aria-hidden="true" />
       </div>
-      <div v-if="loading" class="msg assistant">
-        <span class="role">助手</span>
-        <div class="bubble muted">思考中…</div>
+    </div>
+
+    <footer class="input-dock">
+      <div class="input-row">
+        <el-input
+          v-model="input"
+          type="textarea"
+          :rows="2"
+          placeholder="输入消息，Enter 发送（Shift+Enter 换行）"
+          @keydown.enter.exact.prevent="send"
+        />
+        <el-button type="primary" :loading="loading" @click="send">发送</el-button>
       </div>
-      <!-- Anchor for scroll-to-bottom (history + async images) -->
-      <div ref="bottomAnchor" class="scroll-anchor" aria-hidden="true" />
-    </div>
-    <div class="input-row">
-      <el-input
-        v-model="input"
-        type="textarea"
-        :rows="2"
-        placeholder="输入消息，Enter 发送（Shift+Enter 换行）"
-        @keydown.enter.exact.prevent="send"
-      />
-      <el-button type="primary" :loading="loading" @click="send">发送</el-button>
-    </div>
-    </main>
+    </footer>
   </div>
 </template>
 
@@ -140,9 +143,11 @@ onMounted(() => {
 
 <style scoped>
 .chat-standalone {
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background: linear-gradient(180deg, #f5f7fa 0%, #fff 32%);
 }
 .top-bar {
@@ -158,31 +163,46 @@ onMounted(() => {
   font-weight: 600;
   color: #303133;
 }
-.chat-page {
+.chat-main {
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  max-width: 720px;
   width: 100%;
+  max-width: 720px;
   margin: 0 auto;
-  padding: 16px 20px 24px;
+  padding: 12px 20px 8px;
   box-sizing: border-box;
-  min-height: 0;
 }
 .tip {
+  flex-shrink: 0;
   color: #666;
   font-size: 13px;
-  margin: 0 0 12px;
+  margin: 0 0 10px;
 }
 .messages {
   flex: 1;
-  min-height: 200px;
+  min-height: 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   border: 1px solid #eee;
   border-radius: 8px;
   padding: 12px;
   background: #fafafa;
-  margin-bottom: 12px;
+}
+.input-dock {
+  flex-shrink: 0;
+  width: 100%;
+  background: #fff;
+  border-top: 1px solid #e4e7ed;
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 8%);
+  padding: 12px 20px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+}
+.input-dock .input-row {
+  max-width: 720px;
+  margin: 0 auto;
 }
 .msg {
   margin-bottom: 12px;
@@ -232,6 +252,7 @@ onMounted(() => {
   display: flex;
   gap: 8px;
   align-items: flex-end;
+  width: 100%;
 }
 .input-row .el-input {
   flex: 1;
