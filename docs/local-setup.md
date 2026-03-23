@@ -38,7 +38,6 @@ cp .env.example .env
 - `JWT_SECRET`：任意 32 位以上字符串
 - `DB_HOST`、`DB_PORT`、`DB_DATABASE`、`DB_USERNAME`、`DB_PASSWORD`：你的 MySQL 信息
 - `COZE_PAT`、`COZE_BOT_ID`：扣子开放平台 PAT 和 Bot ID（要调 AI 对话必填）
-- 企业微信回调相关（仅在本机收消息时可先不填）：`WECOM_CORP_ID`、`WECOM_CORP_SECRET`、`WECOM_AGENT_ID`、`WECOM_BOT_TOKEN`、`WECOM_BOT_AES_KEY`
 
 2. 安装依赖并启动：
 
@@ -48,7 +47,7 @@ npm run start:dev
 ```
 
 看到 `Backend running at http://localhost:3000` 即成功。  
-首次启动会自动创建表（`group_binding`、`conversation_message`）。
+首次启动会自动创建表（如 `conversation_message`）。
 
 ---
 
@@ -75,7 +74,8 @@ npm install
 npm run dev
 ```
 
-浏览器打开 **http://localhost:5173**，用 `backend/.env` 里配置的 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 登录。
+- 访客聊天：打开 **http://localhost:5173/** 或 **http://localhost:5173/chat**（免登录）。  
+- 后台：打开 **http://localhost:5173/login**，用 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 登录后进入会话查询。
 
 ---
 
@@ -86,4 +86,4 @@ npm run dev
 | 建库 | MySQL 里执行 `CREATE DATABASE ai_customer_service ...`，表由后端自动建 |
 | 数据库结构 | 在 `backend/src/.../entities/` 的 TypeORM 实体里；等价 SQL 见 [database.md](./database.md) |
 | 后端 | `backend/.env` 填好 → `npm install` → `npm run start:dev` |
-| 前端 | `frontend/.env` 保持 `/api` → `npm install` → `npm run dev` → 访问 http://localhost:5173 |
+| 前端 | `frontend/.env` 保持 `/api` → `npm install` → `npm run dev` → `/chat` 访客页；`/login` 进后台 |

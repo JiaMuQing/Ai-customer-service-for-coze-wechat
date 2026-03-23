@@ -8,8 +8,9 @@
 
 | 表名 | 实体文件路径 |
 |------|--------------|
-| `group_binding` | `backend/src/group-binding/entities/group-binding.entity.ts` |
 | `conversation_message` | `backend/src/session/entities/conversation-message.entity.ts` |
+
+网页聊天使用 `wecomChatId = 'web'`，`wecomUserId` 存 **访客 UUID**（与请求头 `X-Web-Visitor-Id` 一致；字段名历史保留）。
 
 ---
 
@@ -18,22 +19,7 @@
 你只需要在 MySQL 里**先建一个空库**（如 `ai_customer_service`），表由后端自动创建。若需手动建表，可执行下面 SQL：
 
 ```sql
--- 库需先创建： CREATE DATABASE ai_customer_service CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 USE ai_customer_service;
-
-CREATE TABLE IF NOT EXISTS `group_binding` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `wecomChatId` varchar(128) NOT NULL,
-  `chatType` varchar(16) NOT NULL DEFAULT 'group',
-  `botId` varchar(64) NOT NULL,
-  `enabled` tinyint NOT NULL DEFAULT 1,
-  `remark` varchar(255) DEFAULT NULL,
-  `createdAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-  `updatedAt` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UQ_wecomChatId` (`wecomChatId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `conversation_message` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -52,17 +38,10 @@ CREATE TABLE IF NOT EXISTS `conversation_message` (
 
 ## 字段说明
 
-**group_binding（群/会话与 Bot 绑定）**
-
-- `wecomChatId`：企业微信群 chatid 或单聊标识  
-- `chatType`：`group` / `single`  
-- `botId`：扣子 Bot ID  
-- `enabled`：是否启用  
-- `remark`：备注  
-
 **conversation_message（会话消息记录）**
 
-- `wecomChatId` / `wecomUserId`：企微会话与用户  
+- `wecomChatId`：渠道，网页聊天固定为 `web`  
+- `wecomUserId`：访客标识（UUID v4，由前端生成并持久化在浏览器）  
 - `cozeConversationId`：扣子会话 ID（多轮上下文）  
 - `role`：`user` / `assistant`  
 - `content`：消息内容  

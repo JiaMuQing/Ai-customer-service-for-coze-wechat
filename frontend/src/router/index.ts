@@ -4,14 +4,22 @@ import { useAuthStore } from '@/stores/auth';
 const router = createRouter({
   history: createWebHistory(),
   routes: [
-    { path: '/login', name: 'Login', component: () => import('@/views/Login.vue'), meta: { public: true } },
+    { path: '/', redirect: '/chat' },
     {
-      path: '/',
+      path: '/chat',
+      name: 'Chat',
+      meta: { public: true },
+      component: () => import('@/views/Chat.vue'),
+    },
+    { path: '/login', name: 'Login', component: () => import('@/views/Login.vue'), meta: { public: true } },
+    // Legacy path when chat lived under the same shell as admin
+    { path: '/session', redirect: '/admin/session' },
+    {
+      path: '/admin',
       component: () => import('@/views/Layout.vue'),
       meta: { requiresAuth: true },
+      redirect: '/admin/session',
       children: [
-        { path: '', redirect: '/group-binding' },
-        { path: 'group-binding', name: 'GroupBinding', component: () => import('@/views/GroupBinding.vue') },
         { path: 'session', name: 'Session', component: () => import('@/views/Session.vue') },
       ],
     },
@@ -24,7 +32,6 @@ router.beforeEach((to, _from, next) => {
     next();
     return;
   }
-  // Check both store and localStorage (store may not be updated yet in same tick)
   const hasToken = auth.token || localStorage.getItem('token');
   if (to.meta.requiresAuth && !hasToken) {
     next({ name: 'Login' });

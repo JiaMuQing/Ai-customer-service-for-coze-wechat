@@ -17,4 +17,15 @@ export default defineConfig({
       },
     },
   },
+  // preview has no dev proxy unless configured; align with server.proxy
+  preview: {
+    port: 4173,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        rewrite: (p) => p.replace(/^\/api/, ''),
+      },
+    },
+  },
 });

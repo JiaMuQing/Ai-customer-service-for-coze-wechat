@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrap">
     <el-card class="login-card">
-      <template #header>AI 客服管理 — 登录</template>
+      <template #header>后台登录</template>
       <el-form :model="form" label-width="80px" @submit.prevent="onSubmit">
         <el-form-item label="用户名">
           <el-input v-model="form.username" placeholder="固定账号（见 .env ADMIN_USERNAME）" />
@@ -40,7 +40,7 @@ async function onSubmit() {
   try {
     await auth.login(form.username, form.password);
     await nextTick();
-    await router.push('/');
+    await router.push('/admin/session');
   } catch (e: unknown) {
     error.value = (e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? '登录失败';
   } finally {

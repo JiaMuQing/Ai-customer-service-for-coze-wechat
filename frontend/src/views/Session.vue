@@ -2,16 +2,16 @@
   <div>
     <h2>会话记录</h2>
     <el-form inline>
-      <el-form-item label="ChatId">
-        <el-input v-model="wecomChatId" placeholder="可选，按群/会话筛选" clearable style="width: 200px" />
+      <el-form-item label="渠道">
+        <el-input v-model="wecomChatId" placeholder="如 web 筛选网页聊天" clearable style="width: 200px" />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="load">查询</el-button>
       </el-form-item>
     </el-form>
     <el-table :data="list" style="margin-top: 16px">
-      <el-table-column prop="wecomChatId" label="企微 ChatId" width="160" />
-      <el-table-column prop="wecomUserId" label="用户" width="120" />
+      <el-table-column prop="wecomChatId" label="渠道" width="100" />
+      <el-table-column prop="wecomUserId" label="访客标识" width="260" />
       <el-table-column prop="role" label="角色" width="80">
         <template #default="{ row }">{{ row.role === 'user' ? '用户' : '助手' }}</template>
       </el-table-column>

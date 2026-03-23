@@ -4,11 +4,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { WecomModule } from './wecom/wecom.module';
 import { CozeModule } from './coze/coze.module';
-import { GroupBindingModule } from './group-binding/group-binding.module';
 import { SessionModule } from './session/session.module';
-import { GroupBinding } from './group-binding/entities/group-binding.entity';
+import { ChatModule } from './chat/chat.module';
 import { ConversationMessage } from './session/entities/conversation-message.entity';
 
 @Module({
@@ -24,14 +22,13 @@ import { ConversationMessage } from './session/entities/conversation-message.ent
       username: process.env.DB_USERNAME ?? 'root',
       password: process.env.DB_PASSWORD ?? '',
       database: process.env.DB_DATABASE ?? 'ai_customer_service',
-      entities: [GroupBinding, ConversationMessage],
+      entities: [ConversationMessage],
       synchronize: true,
     }),
     AuthModule,
-    WecomModule,
     CozeModule,
-    GroupBindingModule,
     SessionModule,
+    ChatModule,
   ],
   controllers: [AppController],
 })

@@ -1,12 +1,12 @@
 # AI 客服管理系统
 
-基于 Node + Vue + MySQL，接入扣子（Coze）与企业微信智能机器人，实现群/单聊 AI 客服与简单管理后台。
+基于 Node + Vue + MySQL，接入扣子（Coze）：**独立访客聊天页**（`/chat`，免登录）与**后台会话查询**（`/admin`，需登录）。
 
 ## 技术栈
 
 - **后端**：Nest.js、TypeORM、MySQL
 - **前端**：Vue 3、Vite、Pinia、Element Plus
-- **登录**：固定用户名/密码（.env 配置），无权限系统
+- **后台登录**：固定用户名/密码（.env），仅用于 `/admin`；聊天页不登录
 
 ## 环境变量
 
@@ -24,15 +24,11 @@
 
 - 后端：http://localhost:3000  
 - 前端：http://localhost:5173（代理 /api 到 3000）  
-- 登录：使用 `backend/.env` 中的 `ADMIN_USERNAME` / `ADMIN_PASSWORD`。
-
-## 企业微信回调
-
-- 接收消息 URL：`https://你的域名/wecom/callback`（GET 用于验证，POST 用于接收消息）
-- 需配置 `WECOM_BOT_TOKEN`、`WECOM_BOT_AES_KEY` 与后台一致。
+- 访客聊天：**http://localhost:5173/chat**（或根路径 `/` 会跳到 `/chat`），无需登录。  
+- 后台：访问 **http://localhost:5173/login**，使用 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 登录后进入 **会话记录**（`/admin/session`）。
 
 ## 项目结构
 
-- `backend/`：Nest 后端（auth、wecom 回调、coze 对话、群绑定、会话记录）
-- `frontend/`：Vue 管理端（登录、群绑定、会话记录）
+- `backend/`：Nest 后端（auth、扣子对话、网页聊天 API、会话记录）
+- `frontend/`：Vue 端（独立 `/chat`、后台 `/admin` + 登录）
 - `docs/plan.md`：项目计划；`docs/ENV.md`：环境变量说明

@@ -19,17 +19,15 @@
 | **DB_PASSWORD** | 数据库密码 | 你的 MySQL 密码 |
 | **COZE_PAT** | 扣子开放平台 PAT（个人访问令牌） | 扣子开放平台 → 开发者设置 → 个人访问令牌，权限含 chat、知识库等 |
 | **COZE_BOT_ID** | 扣子 Bot ID | 扣子 Bot 开发页 URL 或发布设置中获取 |
-| **WECOM_CORP_ID** | 企业微信企业 ID | 企业微信管理后台 → 我的企业 → 企业信息 |
-| **WECOM_CORP_SECRET** | 自建应用 Secret | 应用管理 → 自建 → 对应应用 → Secret |
-| **WECOM_AGENT_ID** | 自建应用 AgentId | 应用管理 → 自建 → 对应应用 → AgentId |
-| **WECOM_BOT_TOKEN** | 智能机器人接收消息回调 Token | 应用 → 智能机器人 → 接收消息 → 配置 Token（与后台一致） |
-| **WECOM_BOT_AES_KEY** | 智能机器人回调 EncodingAESKey（43 位） | 应用 → 智能机器人 → 接收消息 → 配置 EncodingAESKey |
 
 可选：
 
-- **BASE_URL**：部署后的公网域名（如 `https://your-domain.com`），用于需要校验来源的场景。
+- **BASE_URL**：部署后的公网域名（如 `https://your-domain.com`）。
 - **PORT**：后端端口，默认 `3000`。
 - **COZE_API_BASE**：扣子 API 根地址，默认 `https://api.coze.cn`。
+- **COZE_DEBUG**：设为 `1` / `true` / `yes` 时，后端在终端打印 `/v3/chat` 请求体与扣子返回的完整 JSON（**仅本地排错**，勿在生产开启）。
+- **COZE_POLL_INTERVAL_MS**：非流式对话轮询 `retrieve` 间隔（毫秒），默认 `500`。
+- **COZE_POLL_TIMEOUT_MS**：轮询最长等待（毫秒），默认 `120000`；超时会尝试调用取消对话接口。
 
 ---
 
@@ -39,9 +37,3 @@
 |------|------|----------|
 | **VITE_API_BASE_URL** | 后端 API 根地址 | 开发填 `/api`（由 Vite 代理到后端）；生产填实际后端域名，如 `https://api.your-domain.com` |
 
----
-
-## 企业微信回调 URL 配置
-
-- **接收消息（验证 + 推送）**：填 `https://你的域名/wecom/callback`  
-- 需确保该域名 HTTPS 可访问，且后端已正确配置 `WECOM_BOT_TOKEN`、`WECOM_BOT_AES_KEY`。

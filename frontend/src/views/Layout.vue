@@ -1,14 +1,13 @@
 <template>
   <el-container class="layout">
     <el-header class="header">
-      <span>AI 客服管理</span>
+      <span>后台 — 会话查询</span>
       <el-button type="primary" link @click="logout">退出</el-button>
     </el-header>
     <el-container>
       <el-aside width="200px" class="aside">
         <el-menu :default-active="activeMenu" router>
-          <el-menu-item index="/group-binding">群绑定</el-menu-item>
-          <el-menu-item index="/session">会话记录</el-menu-item>
+          <el-menu-item index="/admin/session">会话记录</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main class="main">
