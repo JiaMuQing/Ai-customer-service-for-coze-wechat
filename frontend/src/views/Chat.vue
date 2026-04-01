@@ -21,7 +21,11 @@
           <span class="role" :class="m.role === 'user' ? 'role-user' : 'role-bot'">{{
             m.role === 'user' ? '我' : '助手'
           }}</span>
-          <div class="bubble bubble-rich" v-html="formatChatBubbleHtml(m.content)"></div>
+          <div
+            class="bubble bubble-rich"
+            v-html="formatChatBubbleHtml(m.content)"
+            @click="onRichImageClick"
+          ></div>
         </div>
         <div v-if="loading" class="msg assistant">
           <span class="role role-bot">助手</span>
@@ -48,6 +52,22 @@
         <el-button type="primary" :loading="loading" @click="send">发送</el-button>
       </div>
     </footer>
+
+    <el-dialog
+      v-model="previewVisible"
+      :title="previewTitle"
+      width="min(96vw, 920px)"
+      top="3vh"
+      align-center
+      append-to-body
+      destroy-on-close
+      class="chat-img-preview-dialog"
+      @closed="onPreviewClosed"
+    >
+      <div class="img-preview-body">
+        <img v-if="previewUrl" :src="previewUrl" :alt="previewAlt" class="img-preview-full" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
